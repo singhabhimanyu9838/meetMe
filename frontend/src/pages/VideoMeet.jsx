@@ -65,10 +65,10 @@ export default function VideoMeetComponent() {
     // }
 
     useEffect(() => {
-        console.log("HELLO")
+        // console.log("HELLO")
         getPermissions();
 
-    })
+    } , []);
 
     let getDislayMedia = () => {
         if (screen) {
@@ -282,7 +282,9 @@ export default function VideoMeetComponent() {
             socketRef.current.emit('join-call', window.location.href)
             socketIdRef.current = socketRef.current.id
 
-            socketRef.current.on('chat-message', addMessage)
+            socketRef.current.off('chat-message');
+            socketRef.current.on('chat-message', addMessage);
+
 
             socketRef.current.on('user-left', (id) => {
                 setVideos((videos) => videos.filter((video) => video.socketId !== id))
@@ -432,12 +434,14 @@ export default function VideoMeetComponent() {
 
 
     let sendMessage = () => {
-        console.log(socketRef.current);
-        socketRef.current.emit('chat-message', message, username)
-        setMessage("");
+    if (!socketRef.current) return;
 
-        // this.setState({ message: "", sender: username })
+    if (message.trim() !== "") {
+        socketRef.current.emit('chat-message', message, username);
+        setMessage("");
     }
+}
+
 
     
     let connect = () => {

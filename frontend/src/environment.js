@@ -1,4 +1,4 @@
-let IS_PROD = true;
+let IS_PROD = false;
 const server = IS_PROD ?
     "https://meetme-backend-h1vb.onrender.com" :
     "http://localhost:8000";
